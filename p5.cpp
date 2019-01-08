@@ -36,6 +36,8 @@ void pretty_print(A &a) {
 }
 int main() {
     A a{1, 2, {3, 'p', {4, 'k'}}, 'w'};
+    //std::cout << getMember(a, &A::z) << std::endl;
+    //std::cout << getMember(a, &A::b, &B::c, &C::s) << std::endl;
     pretty_print(a);
 }
 
