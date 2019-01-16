@@ -13,7 +13,7 @@ struct Node {
 };
 int main() {
 	Node node;
-	node.x = 10;
+	node.x = dist(mt);
 	
 	//	Node node2(node);
 
