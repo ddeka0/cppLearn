@@ -41,7 +41,8 @@ int main() {
             proceed further for processing
         */
     }else {
-        cout << *expectedUeState << endl; // prints the currentUeState instead
+        cout << *expectedUeState << endl;  // prints the currentUeState instead
+                                           // which is not expected
         cout <<"amf is already processing this amfUeNgapId"<<endl;
     }
 
