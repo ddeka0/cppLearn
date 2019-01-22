@@ -21,7 +21,7 @@ int main() {
     */
 	atomic<int> currentUeState(E_UE_REGISTRATION_STARTED /*get the state using the ueMap API only*/);
     int *expectedUeState = new int(E_UE_START_STATE);
-    int equalToCurrentUeState = currentUeState;          /*keep last argument is same as first argument */
+    int nextState = currentUeState;          /*keep last argument is same as first argument */
 
 /*  code to print the types of the three required arguments
     string _x = typeid(&currentUeState).name();
