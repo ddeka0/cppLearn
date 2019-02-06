@@ -25,7 +25,6 @@ int main() {
 			break;
 		}
 	};
-
 	int a[3];
 	a[0] = 7;
 	func(T_array,static_cast<void*>(a));
