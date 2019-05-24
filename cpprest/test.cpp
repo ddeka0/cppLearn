@@ -20,15 +20,10 @@ using namespace web::http;
 using namespace web::http::client;
 
 int main() {
-	json::value a;
-	a["x"] = web::json::value::array(1);
-	a["x"].as_array()[0] = json::value::string("debashish");
 
-	cout << a.serialize() << endl;
+	/* example query bulding for some dummy request for nrf */
 
-
-
-	utility::string_t address = U("test.com");
+	utility::string_t address = U("http://test.com/");
 	http::uri uri = http::uri(address);
 
 	http::uri_builder urib = http::uri_builder(uri)
@@ -42,10 +37,9 @@ int main() {
 	nrfQueryOptions["services"].as_array()[0]
 								= json::value::string("nudm-uecm");
 
-
 	json::value snssai;
-	snssai["sst"] = json::value::number(5);
-	snssai["sd"] = json::value::string("default-sd");
+	snssai["sst"] = json::value::number(1);
+	snssai["sd"] = json::value::string("FFFFFF"); // dummy SD
 
 	nrfQueryOptions["snssais"] = web::json::value::array(1);
 	nrfQueryOptions["snssais"].as_array()[0] = snssai;
@@ -55,5 +49,9 @@ int main() {
 	}
 
 	cout << urib.to_string() << endl;
-	
+	uri = urib.to_uri();
+	cout << uri.to_string() << endl;	// prints the same 
+
+	http_client nrf(uri); // done creating the http_client 
+
 }
