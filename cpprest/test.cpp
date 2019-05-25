@@ -48,9 +48,9 @@ int main() {
 		urib = urib.append_query(qname,qval);
 	}
 
-	cout << urib.to_string() << endl;
+	cout <<"uri_builder => "<<urib.to_string() << endl << endl;
 	uri = urib.to_uri();
-	cout << uri.to_string() << endl;	// prints the same 
+	cout <<"uri => "<<uri.to_string() << endl;	// prints the same 
 
 	http_client nrf(uri); // done creating the http_client 
 
