@@ -82,6 +82,14 @@ int main() {
         }
     }
 
+    /*someting extra ... not related to above */
 
+    for(auto &e:nrfQueryOptions["snssais"].as_array()) {
+    	cout << e.at("sst").as_number().to_int32() <<" "<<e.at("sd").as_string() << endl;
+    }
+
+    for(auto &e:nrfQueryOptions["services"].as_array()) {
+    	cout << e.as_string() << endl;
+    }
 
 }
