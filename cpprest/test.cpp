@@ -39,7 +39,6 @@ map<std::string,int> queryIdMap = {
 std::string getQueryString(std::map<std::string,json::value>& queryOptions) {
     std::set<std::string> Set;
     for(auto &e : queryOptions) {
-    	cout << e.first << endl;
         switch(queryIdMap[e.first])
         {
             case REQUESTER_NF_TYPE:
@@ -76,6 +75,10 @@ std::string getQueryString(std::map<std::string,json::value>& queryOptions) {
 }
 
 
+
+
+
+
 int main() {
 
 	/* example query bulding for some dummy request for nrf */
@@ -101,6 +104,8 @@ int main() {
 	nrfQueryOptions["snssais"] = web::json::value::array(1);
 	nrfQueryOptions["snssais"].as_array()[0] = snssai;
 
+	nrfQueryOptions["dnn"] = json::value::string("test.com");
+
 	for(auto& [qname,qval] : nrfQueryOptions) {
 		urib = urib.append_query(qname,qval);
 	}
@@ -124,6 +129,7 @@ int main() {
     *   These loop need not run beforehand, access each query whenever required
     *   and access accordingly
     */
+    cout <<"printing .. queries provided by the map ... " << endl<<endl;    
     for(auto & e : query) {
         json::value val = json::value::parse(e.second);
         if(e.first == "requester-nf-type" or e.first == "target-nf-type") {
@@ -138,11 +144,20 @@ int main() {
             cout <<e.first<<" "<<val.as_array()[0].as_string() <<endl;
         }
     }
+    cout << endl;
+
+
+
+
+
+
+
+
 
 
 
     /*someting extra ... not related to above */
-
+	cout <<"printing .. snssais and service-names ... " << endl<<endl;    
     for(auto &e:nrfQueryOptions["snssais"].as_array()) {
     	cout << e.at("sst").as_number().to_int32() <<" "<<e.at("sd").as_string() << endl;
     }
@@ -150,7 +165,26 @@ int main() {
     for(auto &e:nrfQueryOptions["service-names"].as_array()) {
     	cout << e.as_string() << endl;
     }
+    cout << endl;
 
     cout <<"printing .. total query string ... " << endl;
-    cout << getQueryString(nrfQueryOptions) << endl;
+    cout << getQueryString(nrfQueryOptions) << endl<<endl;
+
+
+
+    /* some other test ............................... */
+    cout <<"checking .. created hint is equal to query string or not ... " << endl<<endl;    
+    std::set<std::string> Set;
+    Set.insert(std::to_string(1)); // UE ID
+    Set.insert(std::to_string(1));
+    Set.insert("FFFFFF");
+    Set.insert("AMF");
+    Set.insert("SMF");
+    Set.insert("nudm-uecm");
+    Set.insert("test.com");
+    std::string res = "";
+    for(auto &e : Set) {
+    	res += e;
+    }
+    cout << ((res == getQueryString(nrfQueryOptions))?"query string matched":"query string does not match")<< endl;
 }
