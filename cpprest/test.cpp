@@ -19,6 +19,63 @@ using namespace http::experimental::listener;
 using namespace web::http;
 using namespace web::http::client;
 
+/* some test code .......................... */
+enum {
+    REQUESTER_NF_TYPE   = 0,
+    TARGET_NF_TYPE,
+    SERVICE_NAMES,
+    SNSSAIS,
+    DNN,
+};
+
+map<std::string,int> queryIdMap = {
+    {"target-nf-type",          TARGET_NF_TYPE},
+    {"requester-nf-type",       REQUESTER_NF_TYPE},
+    {"service-names",           SERVICE_NAMES},
+    {"snssais",                 SNSSAIS},
+    {"dnn",                     DNN}
+};
+
+std::string getQueryString(std::map<std::string,json::value>& queryOptions) {
+    std::set<std::string> Set;
+    for(auto &e : queryOptions) {
+    	cout << e.first << endl;
+        switch(queryIdMap[e.first])
+        {
+            case REQUESTER_NF_TYPE:
+            case TARGET_NF_TYPE:
+            case DNN:
+            {
+                Set.insert(e.second.as_string());
+            }
+            break;
+            case SERVICE_NAMES:
+            {
+                for(auto &x: e.second.as_array()) {
+                    Set.insert(x.as_string());
+                }
+            }
+            break;
+            case SNSSAIS:
+            {
+                for(auto &x: e.second.as_array()) {
+                    Set.insert(x.at("sd").as_string());
+                    Set.insert(std::to_string(x.at("sst").as_number().to_int32()));
+                }
+            }
+            break;
+            default:
+                cerr << "Unknown query name type" << endl;
+        }
+    }
+    std::string res = "";
+    for(auto &e:Set) {
+    	res += e;
+    }
+    return res;
+}
+
+
 int main() {
 
 	/* example query bulding for some dummy request for nrf */
@@ -33,8 +90,8 @@ int main() {
 
 	nrfQueryOptions["target-nf-type"] = json::value::string("SMF");
 	nrfQueryOptions["requester-nf-type"] = json::value::string("AMF");
-	nrfQueryOptions["services"] = json::value::array(1);
-	nrfQueryOptions["services"].as_array()[0]
+	nrfQueryOptions["service-names"] = json::value::array(1);
+	nrfQueryOptions["service-names"].as_array()[0]
 								= json::value::string("nudm-uecm");
 
 	json::value snssai;
@@ -82,14 +139,18 @@ int main() {
         }
     }
 
+
+
     /*someting extra ... not related to above */
 
     for(auto &e:nrfQueryOptions["snssais"].as_array()) {
     	cout << e.at("sst").as_number().to_int32() <<" "<<e.at("sd").as_string() << endl;
     }
 
-    for(auto &e:nrfQueryOptions["services"].as_array()) {
+    for(auto &e:nrfQueryOptions["service-names"].as_array()) {
     	cout << e.as_string() << endl;
     }
 
+    cout <<"printing .. total query string ... " << endl;
+    cout << getQueryString(nrfQueryOptions) << endl;
 }
