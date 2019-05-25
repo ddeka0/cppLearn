@@ -50,8 +50,38 @@ int main() {
 
 	cout <<"uri_builder => "<<urib.to_string() << endl << endl;
 	uri = urib.to_uri();
-	cout <<"uri => "<<uri.to_string() << endl;	// prints the same 
+	cout <<"uri => "<<uri.to_string() << endl<<endl;	// prints the same 
 
-	http_client nrf(uri); // done creating the http_client 
+
+	/*simulate server in the same file */
+
+    auto query =  uri::split_query(uri::decode(uri.query()));
+    /*  before processing any query ............................ 
+    *   for exmaple I want to get the query of requester-nf-type
+    *   I know it is a string, therefore parse it as string from val
+    *   similarly,
+    *   services is an array of strings ( from standard )
+    *   therefore first convert it to an array class and then convert it to
+    *   string using as_string()
+    * 
+    *   These loop need not run beforehand, access each query whenever required
+    *   and access accordingly
+    */
+    for(auto & e : query) {
+        json::value val = json::value::parse(e.second);
+        if(e.first == "requester-nf-type" or e.first == "target-nf-type") {
+            std::string x = val.as_string();
+            cout <<e.first<<" "<<x << endl;
+        }else if(e.first == "snssais") {
+            int sst =  val.as_array()[0].at("sst").as_number().to_int32();
+            string sd = val.as_array()[0].at("sd").as_string();
+
+            cout << e.first <<" sd = "<< sd <<" sst = "<<sst<< endl;
+        }else if(e.first == "services") {
+            cout <<e.first<<" "<<val.as_array()[0].as_string() <<endl;
+        }
+    }
+
+
 
 }
