@@ -199,22 +199,22 @@ int main() {
 	cout << ((res == getQueryString(nrfQueryOptions))?"query string matched":"query string does not match")<< endl;
 
 
+	std::cout <<BOLDCYAN<<"Test for has_object_field check"<<std::endl<<RESET<<endl;
 	json::value A;
 	json::value B;
-
 	B["x"] = json::value::string("debashish");
-
 	A["y"] = B;
-
 	if(A.has_object_field(U("y"))) {
 		cout << A.at(U("y")).at(U("x")).as_string() << endl;
 	}
-
-	std::cout <<"pplx thread test A ......................... "<<std::endl<<endl;
-
+	std::cout<<endl;
 
 
 
+
+
+
+	std::cout<<BOLDCYAN<<"pplx thread test A"<<std::endl<<RESET<<endl;
 	// This is one way ....
 	int cnt = 5;
 	auto t = pplx::task<std::string>([&cnt]()
@@ -228,13 +228,13 @@ int main() {
 	})
 	.then([](string x)
 	{	
+		sleep(2);
 		std::cout <<GREEN<<"Entry2 with TID : "<<x<<" "<<std::this_thread::get_id()<<RESET<<std::endl;
-	});
+	});	// We can add .wait() here also
 
-	std::cout<<MAGENTA<<"Main Thread with TID : "<<std::this_thread::get_id()<<std::endl <<RESET<<std::endl;
+	std::cout<<BOLDCYAN<<"Tring..tring..tring.."<<std::this_thread::get_id()<<std::endl<<RESET<<std::endl;
 
-	std::cout <<MAGENTA<<"pplx thread test B ....................... "<< std::endl <<RESET<< endl;
-
+	std::cout <<BOLDCYAN<<"pplx thread test B"<< std::endl <<RESET<< endl;
 	// This is one more way 
 	pplx::task_from_result()
 	.then([&cnt]()
@@ -249,9 +249,21 @@ int main() {
 	.then([](string x)
 	{	
 		std::cout <<CYAN<<"Entry4 with TID : "<<x<<" "<<std::this_thread::get_id()<<RESET<<std::endl;
+		return std::string("5G !!! "); 
 	})
-	.wait(); // please wait main thread, for these chain to complete
+	.then([](pplx::task<std::string> prevTask)
+	{
+		try
+        {
+            std::cout <<BOLDYELLOW<<prevTask.get() << RESET <<std::endl;
+        }
+        catch (const std::exception& e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+	}).wait(); // please wait main thread, for these chain to complete
 
-
-	t.wait(); // wait for 1 to complete now 
+	cout <<BOLDGREEN<<"+++++++++"<<RESET<<endl;
+	t.get(); // wait for 1 to complete now 
+	cout <<BOLDMAGENTA<<"---------"<<RESET<<endl;
 }
