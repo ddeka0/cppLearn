@@ -191,23 +191,48 @@ int main() {
 		cout << A.at(U("y")).at(U("x")).as_string() << endl;
 	}
 
-	cout <<"pplx thread test ... "<< endl<<endl;
-	
+	std::cout <<"pplx thread test A ......................... "<<std::endl<<endl;
+
+
+
+
+	// This is one way ....
 	int cnt = 5;
-	pplx::task<std::string>([&cnt]()
+	auto t = pplx::task<std::string>([&cnt]()
 	{
-		sleep(1);
-		cout <<"Entry1 "<<std::this_thread::get_id()<< endl;
+		std::cout <<"Entry1 with TID : "<<std::this_thread::get_id()<<std::endl;
+		// Do someting else here 
 		while(cnt >= 0) {
-			cout <<"loop .... "<<cnt--<<endl;
+			std::cout <<"loop .... "<<cnt--<<std::endl;
 		}
 		return std::string("Hello");
 	})
 	.then([](string x)
 	{	
-		cout <<"Entry2 "<<x<<" "<<std::this_thread::get_id()<<endl;
-	})
-	.wait();
+		std::cout <<"Entry2 with TID : "<<x<<" "<<std::this_thread::get_id()<<std::endl;
+	});
 
-	cout <<"Exit from main "<<std::this_thread::get_id()<<endl;
+	std::cout <<"Main Thread with TID : "<<std::this_thread::get_id()<<std::endl <<std::endl;
+
+	std::cout <<"pplx thread test B ....................... "<< std::endl << endl;
+
+	// This is one more way 
+	pplx::task_from_result()
+	.then([&cnt]()
+	{	
+		std::cout <<"Entry3 with TID : "<<std::this_thread::get_id()<< std::endl;
+		// Do someting else here 
+		while(cnt <= 5) {
+			std::cout <<"loop .... "<<cnt++<<std::endl;
+		}
+		return std::string("Hello");		
+	})
+	.then([](string x)
+	{	
+		std::cout <<"Entry4 with TID : "<<x<<" "<<std::this_thread::get_id()<<std::endl;
+	})
+	.wait(); // please wait main thread, for these chain to complete
+
+
+	t.wait(); // wait for 1 to complete now 
 }
