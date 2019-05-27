@@ -19,6 +19,25 @@ using namespace http::experimental::listener;
 using namespace web::http;
 using namespace web::http::client;
 
+//the following are UBUNTU/LINUX, and MacOS ONLY terminal color codes.
+#define RESET   "\033[0m"
+#define BLACK   "\033[30m"      /* Black */
+#define RED     "\033[31m"      /* Red */
+#define GREEN   "\033[32m"      /* Green */
+#define YELLOW  "\033[33m"      /* Yellow */
+#define BLUE    "\033[34m"      /* Blue */
+#define MAGENTA "\033[35m"      /* Magenta */
+#define CYAN    "\033[36m"      /* Cyan */
+#define WHITE   "\033[37m"      /* White */
+#define BOLDBLACK   "\033[1m\033[30m"      /* Bold Black */
+#define BOLDRED     "\033[1m\033[31m"      /* Bold Red */
+#define BOLDGREEN   "\033[1m\033[32m"      /* Bold Green */
+#define BOLDYELLOW  "\033[1m\033[33m"      /* Bold Yellow */
+#define BOLDBLUE    "\033[1m\033[34m"      /* Bold Blue */
+#define BOLDMAGENTA "\033[1m\033[35m"      /* Bold Magenta */
+#define BOLDCYAN    "\033[1m\033[36m"      /* Bold Cyan */
+#define BOLDWHITE   "\033[1m\033[37m"      /* Bold White */
+
 /* some test code .......................... */
 enum {
 	REQUESTER_NF_TYPE   = 0,
@@ -200,36 +219,36 @@ int main() {
 	int cnt = 5;
 	auto t = pplx::task<std::string>([&cnt]()
 	{
-		std::cout <<"Entry1 with TID : "<<std::this_thread::get_id()<<std::endl;
+		std::cout <<RED<<"Entry1 with TID : "<<std::this_thread::get_id()<<RESET<<std::endl;
 		// Do someting else here 
 		while(cnt >= 0) {
-			std::cout <<"loop .... "<<cnt--<<std::endl;
+			std::cout <<RED"loop .... "<<cnt--<<RESET<<std::endl;
 		}
 		return std::string("Hello");
 	})
 	.then([](string x)
 	{	
-		std::cout <<"Entry2 with TID : "<<x<<" "<<std::this_thread::get_id()<<std::endl;
+		std::cout <<GREEN<<"Entry2 with TID : "<<x<<" "<<std::this_thread::get_id()<<RESET<<std::endl;
 	});
 
-	std::cout <<"Main Thread with TID : "<<std::this_thread::get_id()<<std::endl <<std::endl;
+	std::cout<<MAGENTA<<"Main Thread with TID : "<<std::this_thread::get_id()<<std::endl <<RESET<<std::endl;
 
-	std::cout <<"pplx thread test B ....................... "<< std::endl << endl;
+	std::cout <<MAGENTA<<"pplx thread test B ....................... "<< std::endl <<RESET<< endl;
 
 	// This is one more way 
 	pplx::task_from_result()
 	.then([&cnt]()
 	{	
-		std::cout <<"Entry3 with TID : "<<std::this_thread::get_id()<< std::endl;
+		std::cout <<YELLOW<<"Entry3 with TID : "<<std::this_thread::get_id()<<RESET<<std::endl;
 		// Do someting else here 
 		while(cnt <= 5) {
-			std::cout <<"loop .... "<<cnt++<<std::endl;
+			std::cout<<YELLOW<<"loop .... "<<cnt++<<RESET<<std::endl;
 		}
 		return std::string("Hello");		
 	})
 	.then([](string x)
 	{	
-		std::cout <<"Entry4 with TID : "<<x<<" "<<std::this_thread::get_id()<<std::endl;
+		std::cout <<CYAN<<"Entry4 with TID : "<<x<<" "<<std::this_thread::get_id()<<RESET<<std::endl;
 	})
 	.wait(); // please wait main thread, for these chain to complete
 
