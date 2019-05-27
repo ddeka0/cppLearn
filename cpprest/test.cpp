@@ -254,13 +254,13 @@ int main() {
 	.then([](pplx::task<std::string> prevTask)
 	{
 		try
-        {
-            std::cout <<BOLDYELLOW<<prevTask.get() << RESET <<std::endl;
-        }
-        catch (const std::exception& e)
-        {
-            std::cout << e.what() << std::endl;
-        }
+		{
+			std::cout <<BOLDYELLOW<<prevTask.get() << RESET <<std::endl;
+		}
+		catch (const std::exception& e)
+		{
+			std::cout << e.what() << std::endl;
+		}
 	}).wait(); // please wait main thread, for these chain to complete
 
 	cout <<BOLDGREEN<<"+++++++++"<<RESET<<endl;
