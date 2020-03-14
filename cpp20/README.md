@@ -18,3 +18,9 @@
 			export LD_LIBRARY_PATH=/usr/local/gcc-10/lib64:$LD_LIBRARY_PATH
 		15. source ~/.<rc file> or logout and login
 		16. Compile and run with   g++-10 -std=c++20 ranges.cpp && ./a.out
+		
+		
+#### C++17 & C++20 concepts
+		https://www.modernescpp.com/index.php/tag/c-20
+#### C++20 status:
+		https://gcc.gnu.org/projects/cxx-status.html or https://clang.llvm.org/cxx_status.html (for clang)
