@@ -1,4 +1,4 @@
-#### Instruction for installing gcc 9.3 or gcc 10 on ubuntu 18.04 (experimental)
+#### Instruction for installing gcc 9.3 or gcc 10(experimental) on ubuntu 18.04 
 
 		1. sudo apt update
 		2. sudo apt upgrade
