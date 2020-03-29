@@ -13,3 +13,4 @@ Makefile
 build/
 cmake_install.cmake
 a.out
+tmplbook-code/
