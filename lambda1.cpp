@@ -13,7 +13,8 @@ class B {
     public:
     int x = 10000;
     auto func() {
-        auto lam = [this](int val) {
+	std::cout <<"tis ptr"<<(void*)this << std::endl;
+	auto lam = [this](int val) {
             auto y = this->x + val;
             return y;
         };
