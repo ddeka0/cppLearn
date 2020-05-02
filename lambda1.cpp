@@ -1,20 +1,28 @@
 #include <bits/stdc++.h>
 using namespace std;
+
+void * addr;
 template<typename T>
 class A {
     public:
-    A(T& l) : lam(l) {}
-    auto _more() {
-        return new A(lam);
+    A(T& l) : lam(l) {
+    }
+    ~A(){
+        _more();
+        std::cout <<"called" << std::endl;
+    };
+    void _more() {
+        addr = (void* )(new A(lam));
+        std::cout << addr << std::endl;
     }
     T lam;
 };
 class B {
     public:
-    int x = 10000;
+    int x = 0x12;
     auto func() {
-	std::cout <<"tis ptr"<<(void*)this << std::endl;
-	auto lam = [this](int val) {
+        std::cout <<"tis ptr"<<(void*)this << std::endl;
+        auto lam = [this](int val) {
             auto y = this->x + val;
             return y;
         };
@@ -23,11 +31,19 @@ class B {
         };
         return lam2();
     }
+    void investigate(void * ptr) {
+        auto lam = [this](int val) {
+            auto y = this->x + val;
+            return y;
+        };
+        std::cout << ((A<decltype(lam)>*)(ptr))->lam(1) << std::endl;
+    }
 };
 int main() {
     B b;
     auto x = b.func();
     std::cout << x->lam(1) << std::endl;
-    auto y = x->_more();
-    std::cout << y->lam(1) << std::endl;
+    delete x;
+    b.investigate(addr);
+
 }
