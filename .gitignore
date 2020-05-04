@@ -13,4 +13,11 @@ Makefile
 build/
 cmake_install.cmake
 a.out
+
+coroutine/CMakeCache.txt
+coroutine/CMakeFiles/
+coroutine/Makefile
+coroutine/build/
+coroutine/cmake_install.cmake
+coroutine/a.out
 tmplbook-code/
