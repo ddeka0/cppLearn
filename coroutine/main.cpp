@@ -13,6 +13,7 @@ rtask foo(int n) {
 int main() {
     auto x = foo(1);
     x.resume();
+    getchar();
     x.resume();
     std::cout <<"Returns "<< x.get() << std::endl;
 }
