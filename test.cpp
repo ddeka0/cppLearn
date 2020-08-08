@@ -1,10 +1,23 @@
 #include <bits/stdc++.h>
+using namespace std;
+typedef unsigned int u32;
+#define PrintFunctionName	cout << __PRETTY_FUNCTION__ << endl;
+
+#ifdef RVF
+void func(int &&x) {
+	PrintFunctionName;
+	cout << x << endl;
+}
+#endif
+
+void func(int &x) {
+	PrintFunctionName;
+	cout << x << endl;
+}
+
 int main() {
-	std::vector<int> x;
-	x.push_back(1);
-	x.push_back(2);
-	x.push_back(x.back());
-	for(const auto&y:x) {
-		std::cout << y << std::endl;
-	}
+	u32 y = 3;
+	func(y);
+	int z = 4;
+	func(z);
 }
