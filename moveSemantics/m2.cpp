@@ -93,7 +93,7 @@ class Array {
     }
 
     vector<Int> m_data;
-	//map<int,Int> m_map_data;
+    map<int,Int> m_map_data;
 };
 
 int main() {
