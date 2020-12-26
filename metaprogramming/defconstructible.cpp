@@ -44,4 +44,5 @@ class A {
 };
 int main() {
     std::cout << isDefaultConstructible<A>::value << std::endl;
+    std::cout << std::is_function<A>::value << std::endl;
 }

@@ -1,10 +1,7 @@
-#include <mutex>
 #include <chrono>
 #include <thread>
-#include <vector>
 #include <iostream>
 #include <stop_token>
-#include <condition_variable>
 #include <future>
 #define Debug(arg) std::cout <<"Tid["<<std::this_thread::get_id()<<"]"<<" "<<arg <<std::endl;
 

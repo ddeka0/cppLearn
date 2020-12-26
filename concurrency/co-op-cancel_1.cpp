@@ -5,10 +5,10 @@
 #include <stop_token>
 
 int main() {
-
     std::stop_source stSrc;
     auto token = stSrc.get_token();
-
+    auto token2 = std::move(token);
+    
     std::thread t{[](int x,std::stop_token token) {
         bool done = false;
         while(!done) {
@@ -21,7 +21,6 @@ int main() {
         }
 
     },10,token};
-
 
     // lets ask to stop the thread t
     std::this_thread::sleep_for(std::chrono::seconds(2));
