@@ -1,3 +1,5 @@
+##### https://stackoverflow.com/questions/3106110/what-is-move-semantics and https://stackoverflow.com/questions/3413470/what-is-stdmove-and-when-should-it-be-used
+
 ##### m3.cpp was written to track the memory allocation along with move semantics
 
 
