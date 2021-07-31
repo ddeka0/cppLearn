@@ -9,9 +9,9 @@
 #include <iostream>
 
 #if defined(_MSC_VER)
-#define PrinF   std::cout << __FUNCSIG__ <<" "<< __LINE__ << std::endl;
+#define PrinF   std::cout <<__LINE__<<":"<< __FUNCSIG__<< std::endl;
 #else
-#define PrinF   std::cout << __PRETTY_FUNCTION__<<" "<< __LINE__ << std::endl;
+#define PrinF   std::cout <<__LINE__<<":"<<__PRETTY_FUNCTION__<< std::endl;
 #endif
 
 // C++ language standard detection

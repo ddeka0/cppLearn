@@ -2,12 +2,12 @@
 #include "PrintHelper.hpp"
 using namespace std;
 
-
 template<typename T>
 void func(T x) { // paramType x
     PrinF;
-    std::cout <<"Type(x) : "<< type_name<decltype(x)>() << std::endl;
-    std::cout <<"Type(T) : "<< type_name<T>() << std::endl;
+
+    // std::cout <<"Type(x) : "<< type_name<decltype(x)>() << std::endl;
+    // std::cout <<"Type(T) : "<< type_name<T>() << std::endl;
 }
 
 
@@ -18,7 +18,6 @@ int main() {
     BreakLine;
     
     func("string"); // auto deduce
-
 
 /*
     (gdb) info functions func

@@ -12,8 +12,7 @@ void func(T&& x) {
     std::cout <<"Is x is lavlue ref ? "<< getRefType(x) << std::endl;
 }
 
-template<typename T, typename std::enable_if< std::is_same<T,bool>::value
-                                        ,int>::type = 0 >
+template<typename T, typename std::enable_if< std::is_same<T,bool>::value,int>::type = 0 >
 void func(T&& x) {
     PrinF;
     std::cout <<"Type(x) : "<< type_name<decltype(x)>() << std::endl;

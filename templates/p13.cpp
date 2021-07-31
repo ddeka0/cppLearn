@@ -8,14 +8,12 @@ struct metaFunction {
 };
 
 template<typename, typename>
-struct isTwoTypeSame
-: public metaFunction<bool,false> {
+struct isTwoTypeSame : public metaFunction<bool,false> {
 
 };
 
 template<typename T>
-struct isTwoTypeSame<T, T>
-: public metaFunction<bool,true> { 
+struct isTwoTypeSame<T, T> : public metaFunction<bool,true> { 
 
 };
 

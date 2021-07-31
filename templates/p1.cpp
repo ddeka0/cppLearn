@@ -12,6 +12,9 @@ void func(T x,U y) { // paramType x
     std::cout <<"Type(U) : "<< type_name<U>() << std::endl;
 }
 
+
+// I need one more variatin of func where second tempalte is fixed to int
+
 template<typename T> // partial specialization
 void func(T x,int y) {
     PrinF;
@@ -23,6 +26,9 @@ void func(T x,int y) {
 template<>
 void func(bool x,int y) { // full specialization
     PrinF;
+
+    // for bool. the actions inside func is very very different
+
     std::cout <<"Type(x) : "<< type_name<decltype(x)>() << std::endl;
     std::cout <<"Type(y) : "<< type_name<decltype(y)>() << std::endl;
 }
@@ -30,7 +36,7 @@ void func(bool x,int y) { // full specialization
 
 
 int main() {
-    func(1,2);
+    func(1,2.2);
 
     BreakLine;
 

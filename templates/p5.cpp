@@ -9,6 +9,7 @@ template<
     >
 void func(T<InnerA,InnerB>& x) {
     PrinF;
+    
     std::cout <<"Type(x) : "<< type_name<decltype(x)>() << std::endl;
     std::cout <<"Type(T) : "<< type_name<T<InnerA,InnerB>>() << std::endl;
     std::cout <<"Is x is lavlue ref ? "<< getRefType(x) << std::endl;

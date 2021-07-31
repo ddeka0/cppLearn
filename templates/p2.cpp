@@ -2,13 +2,19 @@
 #include "PrintHelper.hpp"
 using namespace std;
 
+// step 1
+
 template<typename T>
+// step 2
+
 void func(const T& x) { // const T&
     PrinF;
+
+
     std::cout <<"Type(x) : "<< type_name<decltype(x)>() << std::endl;
     std::cout <<"Type(T) : "<< type_name<T>() << std::endl;
     
-    std::cout <<"Is x is lavlue ref ? "<< getRefType(x) << std::endl;
+    // std::cout <<"Is x is lavlue ref ? "<< getRefType(x) << std::endl;
 }
 
 // Type of T depends on the ParamType x

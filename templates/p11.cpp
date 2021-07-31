@@ -1,6 +1,14 @@
 #include "PrintHelper.hpp"
 #include "MemoryHelper.hpp"
 
+
+class InterfaceClass {
+    public:
+    virtual void pleaseOverrideMe() = 0;
+};
+
+
+
 template<typename T>
 void func(T&& x) {
     PrinF;
