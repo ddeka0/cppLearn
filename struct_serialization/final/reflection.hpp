@@ -264,7 +264,7 @@ struct CopyParam<MessageType,MT,MPTR,CLASS_ARRAY_ITEM_TAG> {
 template<typename MessageType,typename MT, MT MPTR>
 struct CopyParam<MessageType,MT,MPTR,ARRAY_TYPE_TAG> {
 	static void copy(const json& j,MessageType& m,const std::string& key) {
-		const int Sz = min(j[key].size(),GetArrLen(m.*MPTR));
+		const int Sz = min(j[key].size(),GetArrLen(m.*MPTR)); /// TODO Check
 		using M = typename MT_traits<typename MT_traits<MT>::member_type>::member_type;
 		for(int i = 0;i<Sz;i++) {
 			CopyParam<MessageType,MT,MPTR, PRIMITIVE_ARRAY_ITEM_TAG + std::is_class<M>::value >::copy(j,m,key,i);
@@ -293,7 +293,7 @@ struct CopyParam<MessageType,MT,MPTR,CLASS_TYPE_TAG> {
 template<typename MessageType, typename MT, MT MPTR, unsigned Ndx, typename... Rest>
 void fillMessage(const json& j, MessageType& m, Pack<MemberBinding<MT,MPTR,Ndx>, Rest...> *) {
 	using M = Members<MessageType>;
-	CopyParam<MessageType,MT,MPTR, std::is_class<typename MT_traits<MT>::member_type>::value >::copy(j,m,M::names()[Ndx]);
+	CopyParam<MessageType,MT,MPTR,std::is_class<typename MT_traits<MT>::member_type>::value >::copy(j,m,M::names()[Ndx]);
 	fillMessage(j,m,(Pack<Rest...> *)nullptr);
 }
 
@@ -305,4 +305,37 @@ void fillMessage(const json& j, MessageType& m, Pack<MemberBinding<MT,MPTR,Ndx>,
  */
 template<typename MessageType>
 void fillMessage(const json&, MessageType&, Pack<> *) {}
+/*-----------------------------------------------------------------------------*/
+
+
+/*-----------------------------------------------------------------------------*/
+// START OF user facing template API
+
+/**
+ * @brief Used to fill struct of type T from json object j
+ * 
+ * @tparam T  -- Type of the struct
+ * @param j -- valid json object
+ * @param m -- referece to struct to be filled
+ */
+template<typename T>
+void Fill(const json& j,T& m) {
+	using M = Members<T>;
+	fillMessage(j,m,(typename M::type*)nullptr);
+}
+
+
+
+/**
+ * @brief Used to print a struct
+ * 
+ * @tparam T -- Type of the struct
+ * @param m -- referece to struct to be printed
+ */
+template<typename T>
+void Print(T& m) {
+	using M = Members<T>;
+	PrintPack(m,(typename M::type*)nullptr);
+}
+
 /*-----------------------------------------------------------------------------*/
