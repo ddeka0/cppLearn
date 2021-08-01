@@ -1,11 +1,19 @@
+#pragma once
+
+enum En : uint8_t {
+	TYPE_1 = 0,
+	TYPE_2 = 1,
+	TYPE_3 = 2
+};
+
 struct messageC {
-	int x;
+	int x[5];
 };
 
 
 struct messageB {
 	int p;
-	double q;
+	En q;
 	messageC r;
 };
 
