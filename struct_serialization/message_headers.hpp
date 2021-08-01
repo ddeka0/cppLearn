@@ -10,9 +10,15 @@ struct messageC {
 	int x[5];
 };
 
+struct messageE {
+	int k;
+	float m;
+};
+
 struct messageD {
 	double t;
 	int v;
+	messageE y[2];
 };
 
 
@@ -20,7 +26,7 @@ struct messageB {
 	int p;
 	En q;
 	messageC r;
-	messageD s[2];
+	messageD s[3];
 };
 
 

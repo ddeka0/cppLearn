@@ -7,6 +7,7 @@
 REFLECTION(messageA,a,b,c);
 REFLECTION(messageB,p,q,r,s);
 REFLECTION(messageC,x);
-REFLECTION(messageD,t,v);
+REFLECTION(messageD,t,v,y);
+REFLECTION(messageE,k,m);
 
 /* -------------------------------------------------------------------------- */

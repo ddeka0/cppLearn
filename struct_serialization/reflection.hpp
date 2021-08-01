@@ -7,8 +7,6 @@
 using namespace std;
 using namespace nlohmann;
 
-
-
 template<typename T, T mPtr, unsigned Index>
 struct MemberBinding {
 	constexpr static T value = mPtr;
@@ -54,6 +52,9 @@ struct PM_traits<T(&)[Size]> {
 
 template<typename T, std::size_t Size>
 std::size_t GetArrLen(T(&)[Size]) { return Size; }
+
+constexpr int CLASS_TYPE_TAG = 0;
+
 
 
 #define RSEQ_N()    10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
@@ -135,12 +136,7 @@ constexpr std::array<const char*, N> arr_##NAME = {MACRO_CONCAT(CON_STR,N)(__VA_
 		MAKE_META_DATA(STRUCT_NAME, GET_ARG_COUNT(__VA_ARGS__), __VA_ARGS__)
 
 
-
-
-
-
-
-template<typename MessageType,typename MT, MT MPTR, int isNested>
+template<typename MessageType,typename MT, MT MPTR, int Tag>
 struct PrintItem;
 
 
@@ -151,19 +147,36 @@ struct PrintItem<A,MT,MPTR,2> {
 	}
 };
 
+template<typename A,typename MT, MT MPTR>
+struct PrintItem<A,MT,MPTR,4> {
+	static void Print(const A& v,const std::string&,int,int idx) {
+		std::cout << (v.*MPTR)[idx];
+	}
+};
+
+template<typename A,typename MT, MT MPTR>
+struct PrintItem<A,MT,MPTR,5> {
+	static void Print(const A& v,const std::string&,int offset,int idx) {
+		using M = Members<typename PM_traits<typename PM_traits<MT>::member_type>::member_type>;
+		std::cout << std::endl;
+		PrintPack((v.*MPTR)[idx],(typename M::type*)nullptr,offset + 2);
+	}
+};
+
 
 template<typename A,typename MT, MT MPTR>
 struct PrintItem<A,MT,MPTR,3> {
 	static void Print(const A& v,const std::string& name,int offset) {
 		const int Sz = GetArrLen(v.*MPTR);
-		using M = Members<typename PM_traits<typename PM_traits<MT>::member_type>::member_type>;
-		std::cout <<std::string(2*offset,' ')<<name<<" [";
+		using M = typename PM_traits<typename PM_traits<MT>::member_type>::member_type;
+		std::cout <<std::string(2*offset,' ')<<name<<" : [";
 		for(int i = 0;i<Sz;i++) {
-			if(i) std::cout <<",";
-			PrintPack((v.*MPTR)[i],(typename M::type*)nullptr,offset + 1);
-			// std::cout <<(v.*MPTR)[i];
+			if(i && std::is_class<M>::value) std::cout <<std::string(2*offset,' ')<<"   ,";
+			else if(i) std::cout <<",";
+			PrintItem<A,MT,MPTR, 4 + std::is_class<M>::value >::Print(v,name,offset,i);
 		}
-		std::cout <<"]"<< std::endl;
+		if(std::is_class<M>::value) std::cout <<std::string(2*offset,' ')<<"]"<< std::endl;
+		else std::cout <<"]"<< std::endl;
 	}
 };
 
@@ -210,8 +223,6 @@ struct CopyParam<MessageType,MT,MPTR,2> {
 template<typename MessageType,typename MT, MT MPTR>
 struct CopyParam<MessageType,MT,MPTR,4> {
 	static void copy(const json& j,MessageType& m,const std::string& key,int idx) {
-		// CopyParam<MessageType,MT,MPTR,
-		// 2 + std::is_array<typename PM_traits<MT>::member_type>::value>::copy(j,m,key);
 		(m.*MPTR)[idx] = j[key][idx];
 	}
 };
