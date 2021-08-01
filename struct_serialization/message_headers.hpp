@@ -10,11 +10,17 @@ struct messageC {
 	int x[5];
 };
 
+struct messageD {
+	double t;
+	int v;
+};
+
 
 struct messageB {
 	int p;
 	En q;
 	messageC r;
+	messageD s[2];
 };
 
 

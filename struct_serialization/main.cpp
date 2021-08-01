@@ -203,8 +203,8 @@ int main() {
 	using M = Members<messageA>;
 	fillMessage(j,ma,(typename M::type*)nullptr);
 
-	std::cout << ma.a << std::endl;
-	std::cout << ma.b << std::endl;
+	// std::cout << ma.a << std::endl;
+	// std::cout << ma.b << std::endl;
 	// std::cout << ma.c.p << std::endl;
 	// std::cout << ma.c.q << std::endl;
 	// std::cout << ma.c.r.x << std::endl;

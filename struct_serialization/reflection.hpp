@@ -24,10 +24,33 @@ struct Members{};
 template<typename>
 struct PM_traits {}; 
 
+
+
 template<class T, class U>
 struct PM_traits<U T::*> {
 	using member_type = U;
 };
+
+
+// template<class T, class U,std::size_t Size>
+// struct PM_traits<U (T::*)[Size]> {
+// 	using member_type = U;
+// 	constexpr static unsigned len = Size;
+// };
+
+
+template<class T, std::size_t Size>
+struct PM_traits<T[Size]> {
+	using member_type = T;
+	constexpr static unsigned len = Size;
+};
+
+template<class T, std::size_t Size>
+struct PM_traits<T(&)[Size]> {
+	using member_type = T;
+	constexpr static unsigned len = Size;
+};
+
 
 template<typename T, std::size_t Size>
 std::size_t GetArrLen(T(&)[Size]) { return Size; }
@@ -133,10 +156,12 @@ template<typename A,typename MT, MT MPTR>
 struct PrintItem<A,MT,MPTR,3> {
 	static void Print(const A& v,const std::string& name,int offset) {
 		const int Sz = GetArrLen(v.*MPTR);
+		using M = Members<typename PM_traits<typename PM_traits<MT>::member_type>::member_type>;
 		std::cout <<std::string(2*offset,' ')<<name<<" [";
 		for(int i = 0;i<Sz;i++) {
 			if(i) std::cout <<",";
-			std::cout <<(v.*MPTR)[i];
+			PrintPack((v.*MPTR)[i],(typename M::type*)nullptr,offset + 1);
+			// std::cout <<(v.*MPTR)[i];
 		}
 		std::cout <<"]"<< std::endl;
 	}
@@ -183,13 +208,30 @@ struct CopyParam<MessageType,MT,MPTR,2> {
 };
 
 template<typename MessageType,typename MT, MT MPTR>
+struct CopyParam<MessageType,MT,MPTR,4> {
+	static void copy(const json& j,MessageType& m,const std::string& key,int idx) {
+		// CopyParam<MessageType,MT,MPTR,
+		// 2 + std::is_array<typename PM_traits<MT>::member_type>::value>::copy(j,m,key);
+		(m.*MPTR)[idx] = j[key][idx];
+	}
+};
+
+template<typename MessageType,typename MT, MT MPTR>
+struct CopyParam<MessageType,MT,MPTR,5> {
+	static void copy(const json& j,MessageType& m,const std::string& key,int idx) {
+		using M = Members<typename PM_traits<typename PM_traits<MT>::member_type>::member_type>;
+		fillMessage(j[key][idx],(m.*MPTR)[idx],(typename M::type*)nullptr);
+	}
+};
+
+template<typename MessageType,typename MT, MT MPTR>
 struct CopyParam<MessageType,MT,MPTR,3> {
 	static void copy(const json& j,MessageType& m,const std::string& key) {
 		const int Sz = min(j[key].size(),GetArrLen(m.*MPTR));
+		using M = typename PM_traits<typename PM_traits<MT>::member_type>::member_type;
 		for(int i = 0;i<Sz;i++) {
-			(m.*MPTR)[i] = 	j[key][i];
+			CopyParam<MessageType,MT,MPTR, 4 + std::is_class<M>::value >::copy(j,m,key,i);
 		}
-		//std::cout <<"Sz = "<<Sz << std::endl;
 	}
 };
 
